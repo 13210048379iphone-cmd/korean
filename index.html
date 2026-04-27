@@ -683,507 +683,213 @@
 <body>
 
     <div class="container">
-        <!-- ==================== 顶部标题 ==================== -->
         <header class="header">
             <div class="icon-row">
                 <div class="logo-icon">🇰🇷</div>
             </div>
-            <h1>韩语音频学习助手</h1>
-            <p class="subtitle">选择你的等级，生成地道韩语音频和练习作业</p>
+            <h1>韩语短文学习助手</h1>
+            <p class="subtitle">选择等级，AI 自动生成对应难度的韩语短文</p>
         </header>
 
-        <!-- ==================== 难度选择区 ==================== -->
         <div class="difficulty-section">
             <div class="section-label">📊 选择难度等级</div>
             <div class="difficulty-grid" id="difficultyGrid">
                 <button class="diff-btn active" data-level="zero">
-                    零基础<span class="level-num">入门起步</span>
+                    零基础<span class="level-num">入门短文</span>
                 </button>
                 <button class="diff-btn" data-level="topik1">
-                    TOPIK 1<span class="level-num">初级·日常</span>
+                    TOPIK 1<span class="level-num">初级短文</span>
                 </button>
                 <button class="diff-btn" data-level="topik2">
-                    TOPIK 2<span class="level-num">中级·对话</span>
+                    TOPIK 2<span class="level-num">中级短文</span>
                 </button>
                 <button class="diff-btn" data-level="topik3">
-                    TOPIK 3<span class="level-num">进阶·表达</span>
+                    TOPIK 3<span class="level-num">进阶短文</span>
                 </button>
             </div>
         </div>
 
-        <!-- ==================== 生成按钮 ==================== -->
         <div class="generate-section">
             <button class="btn-generate" id="btnGenerate">
-                <span class="sparkle">✨</span> 生成今日韩语音频
+                <span class="sparkle">✨</span> 生成韩语短文
             </button>
         </div>
 
-        <!-- ==================== 学习内容展示区 ==================== -->
         <div class="content-card empty-state" id="contentCard">
             <span class="empty-icon">📖</span>
-            <p>请选择难度等级，然后点击生成按钮</p>
+            <p>请选择难度等级，然后点击生成韩语短文</p>
         </div>
 
-        <!-- ==================== 音频播放区 ==================== -->
-        <div class="audio-section" id="audioSection" style="display:none;">
-            <button class="btn-play" id="btnPlay">
-                <span class="play-icon">🔊</span> 播放韩语音频
-            </button>
-            <span class="audio-status" id="audioStatus"></span>
-        </div>
-
-        <!-- ==================== 作业区 ==================== -->
-        <div id="exercisesContainer" style="display:none;">
-            <div class="section-label" style="margin-top:8px;">📝 课后练习</div>
-            <div class="exercises-grid">
-                <!-- 听写题 -->
-                <div class="exercise-card" id="exDictation">
-                    <span class="ex-type dictation">🎧 听写题</span>
-                    <p class="ex-question">请写出你听到的韩语句子：</p>
-                    <button class="mini-play-btn" id="btnMiniPlay">🔊 点击播放音频</button>
-                    <input type="text" class="ex-input" id="inputDictation" placeholder="在此输入你听到的韩语...">
-                </div>
-                <!-- 选择题 -->
-                <div class="exercise-card" id="exChoice">
-                    <span class="ex-type choice">✅ 选择题</span>
-                    <p class="ex-question">这句话的中文意思是什么？</p>
-                    <div class="ex-options" id="choiceOptions"></div>
-                </div>
-                <!-- 填空题 -->
-                <div class="exercise-card" id="exFill">
-                    <span class="ex-type fill">✏️ 填空题</span>
-                    <p class="ex-question">请补全下面的韩语句子：</p>
-                    <p style="font-family:var(--font-korean);font-size:18px;font-weight:600;margin-bottom:8px;letter-spacing:0.5px;" id="fillSentenceDisplay"></p>
-                    <input type="text" class="ex-input" id="inputFill" placeholder="填入缺失的单词...">
-                </div>
-                <!-- 翻译题 -->
-                <div class="exercise-card" id="exTranslate">
-                    <span class="ex-type translate">🌐 翻译题</span>
-                    <p class="ex-question">请将以下中文翻译成韩语：</p>
-                    <p style="font-weight:600;color:var(--text);margin-bottom:8px;font-size:15px;" id="translatePrompt"></p>
-                    <input type="text" class="ex-input" id="inputTranslate" placeholder="在此输入韩语翻译...">
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== 答案区 ==================== -->
-        <div class="answer-section" id="answerSection" style="display:none;">
-            <button class="btn-answer" id="btnAnswer">🔍 查看答案</button>
-            <div class="answers-panel" id="answersPanel"></div>
-        </div>
-
-        <!-- ==================== Footer ==================== -->
         <div class="footer">
-            韩语音频学习助手 · MVP v1.0 · 浏览器语音合成
+            韩语短文学习助手 · AI 短文版
         </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
         (function() {
-            // ==================== DOM 元素 ====================
             const difficultyGrid = document.getElementById('difficultyGrid');
             const diffButtons = difficultyGrid.querySelectorAll('.diff-btn');
             const btnGenerate = document.getElementById('btnGenerate');
             const contentCard = document.getElementById('contentCard');
-            const audioSection = document.getElementById('audioSection');
-            const btnPlay = document.getElementById('btnPlay');
-            const audioStatus = document.getElementById('audioStatus');
-            const exercisesContainer = document.getElementById('exercisesContainer');
-            const answerSection = document.getElementById('answerSection');
-            const btnAnswer = document.getElementById('btnAnswer');
-            const answersPanel = document.getElementById('answersPanel');
-            const btnMiniPlay = document.getElementById('btnMiniPlay');
-            const inputDictation = document.getElementById('inputDictation');
-            const inputFill = document.getElementById('inputFill');
-            const inputTranslate = document.getElementById('inputTranslate');
-            const choiceOptions = document.getElementById('choiceOptions');
-            const fillSentenceDisplay = document.getElementById('fillSentenceDisplay');
-            const translatePrompt = document.getElementById('translatePrompt');
             const toast = document.getElementById('toast');
 
-            // ==================== 状态 ====================
             let currentLevel = 'zero';
-            let currentContent = null;
-            let isPlaying = false;
-            let answersVisible = false;
             let toastTimer = null;
+            let isLoading = false;
 
-            // ==================== Toast ====================
             function showToast(msg) {
                 if (toastTimer) clearTimeout(toastTimer);
                 toast.textContent = msg;
                 toast.classList.add('show');
-                toastTimer = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2200);
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
             }
 
-            // ==================== 内容库 ====================
-const contentDB = {
-  zero: [
-    {
-      korean: "안녕하세요. 저는 학생입니다. 한국어를 처음 배우고 있습니다. 매일 조금씩 공부하고 있습니다.",
-      chinese: "你好。我是学生。我正在学习韩语。我每天一点点地学习。",
-      vocab: "안녕하세요（你好）, 학생（学生）, 배우다（学习）, 매일（每天）",
-      pronunciation: "安宁哈塞哟..."
-    }
-  ],
+            const levelMap = {
+                zero: '韩语零基础。只能使用最简单的问候、自我介绍、日常词汇。句子要非常短。',
+                topik1: 'TOPIK 1。使用简单日常生活主题，例如吃饭、购物、天气、学校、时间。',
+                topik2: 'TOPIK 2。短文可以稍微长一点，包含原因、计划、感受，但不要太难。',
+                topik3: 'TOPIK 3。表达更自然，可以包含转折、原因、建议、观点，接近真实韩国人表达。'
+            };
 
-  topik1: [
-    {
-      korean: "오늘은 날씨가 아주 좋습니다. 저는 친구와 함께 카페에 가서 커피를 마셨습니다. 우리는 즐거운 시간을 보냈습니다.",
-      chinese: "今天天气很好。我和朋友一起去了咖啡店喝咖啡。我们度过了愉快的时光。",
-      vocab: "날씨（天气）, 친구（朋友）, 카페（咖啡店）, 즐겁다（开心）",
-      pronunciation: "..."
-    }
-  ],
-
-  topik2: [
-    {
-      korean: "요즘 한국어를 배우는 사람들이 점점 많아지고 있습니다. 한국 드라마와 음악의 영향으로 많은 사람들이 한국어에 관심을 가지게 되었습니다.",
-      chinese: "最近学习韩语的人越来越多。因为韩剧和音乐的影响，很多人开始对韩语感兴趣。",
-      vocab: "요즘（最近）, 점점（逐渐）, 영향（影响）, 관심（兴趣）",
-      pronunciation: "..."
-    }
-  ],
-
-  topik3: [
-    {
-      korean: "외국어를 배우는 것은 단순히 언어 능력을 향상시키는 것뿐만 아니라, 그 나라의 문화와 사고방식을 이해하는 데에도 큰 도움이 됩니다.",
-      chinese: "学习外语不仅能提高语言能力，还能帮助理解该国文化和思维方式。",
-      vocab: "외국어（外语）, 향상시키다（提高）, 문화（文化）, 사고방식（思维方式）",
-      pronunciation: "..."
-    }
-  ]
-};
-
-            // ==================== 获取随机内容 ====================
-            function getRandomContent(level) {
-                const pool = contentDB[level];
-                if (!pool || pool.length === 0) return null;
-                const randomIndex = Math.floor(Math.random() * pool.length);
-                return pool[randomIndex];
-            }
-
-            // ==================== 生成选择题选项 ====================
-            function generateChoiceOptions(correctChinese, level) {
-                const pool = contentDB[level];
-                const otherOptions = pool
-                    .filter(item => item.chinese !== correctChinese)
-                    .map(item => item.chinese);
-                // 随机打乱并取3个
-                const shuffled = otherOptions.sort(() => Math.random() - 0.5);
-                const distractors = shuffled.slice(0, Math.min(3, shuffled.length));
-                // 如果不够3个，从其他等级补充
-                if (distractors.length < 3) {
-                    const allChinese = [];
-                    for (const key in contentDB) {
-                        if (key !== level) {
-                            contentDB[key].forEach(item => {
-                                if (item.chinese !== correctChinese && !allChinese.includes(item
-                                        .chinese)) {
-                                    allChinese.push(item.chinese);
-                                }
-                            });
-                        }
-                    }
-                    const extraShuffled = allChinese.sort(() => Math.random() - 0.5);
-                    while (distractors.length < 3 && extraShuffled.length > 0) {
-                        const extra = extraShuffled.shift();
-                        if (!distractors.includes(extra)) {
-                            distractors.push(extra);
-                        }
-                    }
+            // 备用短文：如果后端没接好，会显示这些内容，避免页面空白
+            const fallbackDB = {
+                zero: {
+                    korean: '안녕하세요. 저는 학생입니다. 한국어를 공부합니다. 매일 조금씩 배웁니다.',
+                    chinese: '你好。我是学生。我学习韩语。我每天一点点地学习。',
+                    vocabulary: [
+                        { word: '안녕하세요', meaning: '你好' },
+                        { word: '학생', meaning: '学生' },
+                        { word: '공부하다', meaning: '学习' },
+                        { word: '매일', meaning: '每天' }
+                    ]
+                },
+                topik1: {
+                    korean: '오늘은 날씨가 좋습니다. 저는 친구와 카페에 갔습니다. 커피를 마시고 이야기를 했습니다.',
+                    chinese: '今天天气很好。我和朋友去了咖啡店。喝了咖啡，也聊了天。',
+                    vocabulary: [
+                        { word: '날씨', meaning: '天气' },
+                        { word: '친구', meaning: '朋友' },
+                        { word: '카페', meaning: '咖啡店' },
+                        { word: '이야기하다', meaning: '聊天' }
+                    ]
+                },
+                topik2: {
+                    korean: '요즘 저는 한국어 공부에 관심이 많습니다. 매일 짧은 글을 읽고 새로운 단어를 외웁니다. 아직 어렵지만 조금씩 좋아지고 있습니다.',
+                    chinese: '最近我对韩语学习很感兴趣。每天读短文，背新单词。虽然还很难，但正在一点点变好。',
+                    vocabulary: [
+                        { word: '요즘', meaning: '最近' },
+                        { word: '관심', meaning: '兴趣' },
+                        { word: '외우다', meaning: '背诵' },
+                        { word: '조금씩', meaning: '一点点' }
+                    ]
+                },
+                topik3: {
+                    korean: '외국어를 배울 때 가장 중요한 것은 꾸준함이라고 생각합니다. 하루에 많은 시간을 공부하지 못해도 매일 계속하면 실력이 조금씩 늘어납니다. 그래서 저는 짧은 글을 읽는 습관을 만들려고 합니다.',
+                    chinese: '我认为学习外语时最重要的是坚持。即使每天不能学习很久，只要每天持续，能力也会一点点提高。所以我想养成阅读短文的习惯。',
+                    vocabulary: [
+                        { word: '꾸준함', meaning: '坚持、持续性' },
+                        { word: '실력', meaning: '实力、能力' },
+                        { word: '늘어나다', meaning: '增长、提高' },
+                        { word: '습관', meaning: '习惯' }
+                    ]
                 }
-                // 合并正确答案和干扰项，随机排列
-                const allOptions = [correctChinese, ...distractors.slice(0, 3)];
-                const finalShuffled = allOptions.sort(() => Math.random() - 0.5);
-                const letters = ['A', 'B', 'C', 'D'];
-                return finalShuffled.map((opt, i) => ({
-                    letter: letters[i],
-                    text: opt,
-                    isCorrect: opt === correctChinese
-                }));
+            };
+
+            function normalizeVocabulary(vocab) {
+                if (Array.isArray(vocab)) return vocab;
+                if (typeof vocab === 'string') {
+                    return vocab.split(/[,，、]/).map(item => {
+                        const match = item.match(/(.+?)[（(](.+?)[）)]/);
+                        return match ? { word: match[1].trim(), meaning: match[2].trim() } : { word: item.trim(), meaning: '' };
+                    }).filter(v => v.word);
+                }
+                return [];
             }
 
-            // ==================== 渲染学习内容 ====================
-            function renderContent(content) {
-                if (!content) return;
-
-                // 词汇标签
-                const vocabHTML = content.vocabulary.map(v =>
-                    `<span class="vocab-chip">${v.word} <span class="vocab-meaning">${v.meaning}</span></span>`
+            function renderContent(content, isFallback = false) {
+                const vocabulary = normalizeVocabulary(content.vocabulary || content.vocab);
+                const vocabHTML = vocabulary.map(v =>
+                    `<span class="vocab-chip">${v.word}<span class="vocab-meaning">${v.meaning}</span></span>`
                 ).join('');
 
                 contentCard.classList.remove('empty-state');
                 contentCard.innerHTML = `
-                    <h3>📖 学习内容</h3>
+                    <h3>📖 韩语短文</h3>
+                    ${isFallback ? '<p style="color:#9BA0B8;font-size:13px;margin-bottom:10px;">当前显示备用短文。接好后端 API 后，每次会自动生成不同内容。</p>' : ''}
                     <div class="korean-text">${content.korean}</div>
                     <div class="chinese-text">💬 ${content.chinese}</div>
                     <div class="info-row">
                         <span class="info-tag"><span class="tag-icon">📝</span> 关键词汇</span>
                     </div>
                     <div class="vocab-list">${vocabHTML}</div>
-                    <div style="margin-top:14px;">
-                        <span class="info-tag"><span class="tag-icon">🗣️</span> 发音提示</span>
-                    </div>
-                    <div class="pronunciation-tip" style="margin-top:6px;">${content.pronunciation.replace(/\n/g, '<br>')}</div>
-                `;
-
-                audioSection.style.display = 'flex';
-                audioStatus.textContent = '';
-                btnPlay.classList.remove('playing');
-                isPlaying = false;
-            }
-
-            // ==================== 渲染作业 ====================
-            function renderExercises(content, level) {
-                if (!content) return;
-
-                // 听写题
-                inputDictation.value = '';
-
-                // 选择题
-                const options = generateChoiceOptions(content.chinese, level);
-                choiceOptions.innerHTML = options.map(opt => `
-                    <label class="ex-option" data-correct="${opt.isCorrect}">
-                        <span class="opt-letter">${opt.letter}</span>
-                        <span>${opt.text}</span>
-                    </label>
-                `).join('');
-
-                // 填空题
-                fillSentenceDisplay.textContent = content.fillBlank.sentence;
-                inputFill.value = '';
-
-                // 翻译题
-                translatePrompt.textContent = content.chinese;
-                inputTranslate.value = '';
-
-                exercisesContainer.style.display = 'block';
-                answerSection.style.display = 'block';
-                answersPanel.classList.remove('visible');
-                answersVisible = false;
-                btnAnswer.textContent = '🔍 查看答案';
-                btnAnswer.classList.remove('showing');
-            }
-
-            // ==================== 渲染答案 ====================
-            function renderAnswers(content, level) {
-                if (!content) return;
-                const options = generateChoiceOptions(content.chinese, level);
-                const correctOption = options.find(o => o.isCorrect);
-
-                answersPanel.innerHTML = `
-                    <div class="answer-item">
-                        <span class="answer-label">🎧 听写题答案</span>
-                        <div class="answer-value">${content.korean}</div>
-                    </div>
-                    <div class="answer-item">
-                        <span class="answer-label">✅ 选择题答案</span>
-                        <div class="answer-value zh">正确答案：${correctOption ? correctOption.letter : ''}. ${content.chinese}</div>
-                    </div>
-                    <div class="answer-item">
-                        <span class="answer-label">✏️ 填空题答案</span>
-                        <div class="answer-value">${content.fillBlank.answer}</div>
-                        <div style="font-family:var(--font-korean);color:var(--text);margin-top:2px;">完整句子：${content.korean}</div>
-                    </div>
-                    <div class="answer-item">
-                        <span class="answer-label">🌐 翻译题答案</span>
-                        <div class="answer-value">${content.korean}</div>
-                    </div>
                 `;
             }
 
-            // ==================== 语音合成 ====================
-            function getKoreanVoice() {
-                const voices = speechSynthesis.getVoices();
-                // 优先查找韩语语音
-                let koreanVoice = voices.find(v => v.lang === 'ko-KR' && v.localService);
-                if (!koreanVoice) {
-                    koreanVoice = voices.find(v => v.lang === 'ko-KR');
-                }
-                if (!koreanVoice) {
-                    koreanVoice = voices.find(v => v.lang.startsWith('ko'));
-                }
-                return koreanVoice || null;
+            async function fetchAIText(level) {
+                const prompt = `你是一位专业韩语老师。请给中文母语学习者生成一段韩语短文。
+学生等级：${levelMap[level]}
+
+要求：
+1. 生成一段韩语短文，3到6句。
+2. 内容自然、地道，适合该等级。
+3. 给出准确中文翻译。
+4. 给出5个以内关键词汇。
+5. 只返回 JSON，不要返回其他解释。
+
+JSON格式：
+{
+  "korean": "韩语短文",
+  "chinese": "中文翻译",
+  "vocabulary": [
+    {"word":"韩语词", "meaning":"中文意思"}
+  ]
+}`;
+
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ level, prompt })
+                });
+
+                if (!response.ok) throw new Error('API 请求失败');
+                return await response.json();
             }
 
-            function speakKorean(text, onStart, onEnd) {
-                // 停止之前的播放
-                speechSynthesis.cancel();
-
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ko-KR';
-                utterance.rate = 0.85; // 稍慢，适合学习
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
-
-                const koreanVoice = getKoreanVoice();
-                if (koreanVoice) {
-                    utterance.voice = koreanVoice;
-                }
-
-                utterance.onstart = () => {
-                    if (onStart) onStart();
-                };
-                utterance.onend = () => {
-                    if (onEnd) onEnd();
-                };
-                utterance.onerror = (e) => {
-                    console.warn('语音合成错误:', e);
-                    if (onEnd) onEnd();
-                    if (e.error !== 'canceled' && e.error !== 'interrupted') {
-                        showToast('⚠️ 语音播放失败，请检查浏览器是否支持韩语语音');
-                    }
-                };
-
-                speechSynthesis.speak(utterance);
-            }
-
-            function handlePlayAudio() {
-                if (!currentContent) {
-                    showToast('请先生成学习内容');
-                    return;
-                }
-                if (isPlaying) {
-                    speechSynthesis.cancel();
-                    isPlaying = false;
-                    btnPlay.classList.remove('playing');
-                    btnPlay.querySelector('.play-icon').textContent = '🔊';
-                    audioStatus.textContent = '已停止';
-                    return;
-                }
-                speakKorean(
-                    currentContent.korean,
-                    () => {
-                        isPlaying = true;
-                        btnPlay.classList.add('playing');
-                        btnPlay.querySelector('.play-icon').textContent = '⏸️';
-                        audioStatus.textContent = '正在播放...';
-                    },
-                    () => {
-                        isPlaying = false;
-                        btnPlay.classList.remove('playing');
-                        btnPlay.querySelector('.play-icon').textContent = '🔊';
-                        audioStatus.textContent = '播放完毕 ✓';
-                        setTimeout(() => {
-                            if (audioStatus.textContent === '播放完毕 ✓') {
-                                audioStatus.textContent = '';
-                            }
-                        }, 3000);
-                    }
-                );
-            }
-
-            // ==================== 事件监听 ====================
-            // 难度选择
             diffButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
                     diffButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentLevel = btn.dataset.level;
-                    showToast(
-                        `已选择：${btn.textContent.trim().split('\n')[0]} ${btn.querySelector('.level-num') ? '· ' + btn.querySelector('.level-num').textContent : ''}`
-                        );
+                    showToast(`已选择：${btn.textContent.trim().split('\n')[0]}`);
                 });
             });
 
-            // 生成内容
-            btnGenerate.addEventListener('click', () => {
-                const content = getRandomContent(currentLevel);
-                if (!content) {
-                    showToast('⚠️ 该等级暂无内容，请选择其他等级');
-                    return;
-                }
-                currentContent = content;
-                renderContent(content);
-                renderExercises(content, currentLevel);
-                renderAnswers(content, currentLevel);
-                // 滚动到内容区
-                contentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                showToast('✅ 学习内容已生成！');
-            });
+            btnGenerate.addEventListener('click', async () => {
+                if (isLoading) return;
+                isLoading = true;
+                btnGenerate.disabled = true;
+                btnGenerate.innerHTML = '<span class="sparkle">⏳</span> 正在生成短文...';
 
-            // 播放音频
-            btnPlay.addEventListener('click', handlePlayAudio);
-
-            // 小播放按钮（听写题）
-            btnMiniPlay.addEventListener('click', () => {
-                if (!currentContent) {
-                    showToast('请先生成学习内容');
-                    return;
-                }
-                // 使用独立的播放（不与主按钮状态冲突）
-                speechSynthesis.cancel();
-                if (isPlaying) {
-                    isPlaying = false;
-                    btnPlay.classList.remove('playing');
-                    btnPlay.querySelector('.play-icon').textContent = '🔊';
-                    audioStatus.textContent = '';
-                }
-                speakKorean(
-                    currentContent.korean,
-                    () => {
-                        btnMiniPlay.textContent = '⏸️ 正在播放...';
-                        btnMiniPlay.style.background = '#FFE4E0';
-                    },
-                    () => {
-                        btnMiniPlay.textContent = '🔊 点击播放音频';
-                        btnMiniPlay.style.background = '#FFF0EE';
-                    }
-                );
-            });
-
-            // 查看答案
-            btnAnswer.addEventListener('click', () => {
-                if (!currentContent) {
-                    showToast('请先生成学习内容');
-                    return;
-                }
-                answersVisible = !answersVisible;
-                if (answersVisible) {
-                    answersPanel.classList.add('visible');
-                    btnAnswer.textContent = '🔒 隐藏答案';
-                    btnAnswer.classList.add('showing');
-                    answersPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    answersPanel.classList.remove('visible');
-                    btnAnswer.textContent = '🔍 查看答案';
-                    btnAnswer.classList.remove('showing');
+                try {
+                    const content = await fetchAIText(currentLevel);
+                    renderContent(content, false);
+                    showToast('✅ AI短文已生成！');
+                } catch (error) {
+                    console.warn('AI生成失败，显示备用短文：', error);
+                    renderContent(fallbackDB[currentLevel], true);
+                    showToast('⚠️ 后端未连接，先显示备用短文');
+                } finally {
+                    isLoading = false;
+                    btnGenerate.disabled = false;
+                    btnGenerate.innerHTML = '<span class="sparkle">✨</span> 生成韩语短文';
+                    contentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
 
-            // ==================== 初始化 ====================
-            function init() {
-                // 预加载语音列表
-                if ('speechSynthesis' in window) {
-                    speechSynthesis.getVoices();
-                    speechSynthesis.onvoiceschanged = () => {
-                        speechSynthesis.getVoices();
-                    };
-                } else {
-                    showToast('⚠️ 您的浏览器不支持语音合成，请使用Chrome或Edge');
-                }
-
-                // 默认选中零基础，自动生成第一组内容
-                const defaultContent = getRandomContent('zero');
-                if (defaultContent) {
-                    currentContent = defaultContent;
-                    renderContent(defaultContent);
-                    renderExercises(defaultContent, 'zero');
-                    renderAnswers(defaultContent, 'zero');
-                }
-
-                console.log('🇰🇷 韩语音频学习助手 MVP v1.0 已就绪');
-                console.log('   当前等级:', currentLevel);
-                console.log('   语音合成:', 'speechSynthesis' in window ? '✅ 支持' : '❌ 不支持');
-            }
-
-            init();
+            renderContent(fallbackDB.zero, true);
+            console.log('🇰🇷 韩语短文学习助手 AI版 已就绪');
         })();
     </script>
 </body>
