@@ -822,191 +822,43 @@
             }
 
             // ==================== 内容库 ====================
-            const contentDB = {
-                zero: [{
-                    id: 'z1',
-                    korean: '안녕하세요!',
-                    chinese: '你好！',
-                    vocabulary: [{ word: '안녕하세요', meaning: '你好' }],
-                    pronunciation: 'an-nyeong-ha-se-yo\n注意：하(ha)发音轻柔，세요(se-yo)连读',
-                    fillBlank: { sentence: '______!', answer: '안녕하세요' }
-                }, {
-                    id: 'z2',
-                    korean: '감사합니다!',
-                    chinese: '谢谢！',
-                    vocabulary: [{ word: '감사합니다', meaning: '谢谢' }],
-                    pronunciation: 'gam-sa-ham-ni-da\n注意：합니다 中 ham-ni-da 发音为 [함니다]',
-                    fillBlank: { sentence: '______!', answer: '감사합니다' }
-                }, {
-                    id: 'z3',
-                    korean: '저는 민수입니다.',
-                    chinese: '我是民秀。',
-                    vocabulary: [{ word: '저는', meaning: '我（主语）' }, { word: '입니다', meaning: '是' }],
-                    pronunciation: 'jeo-neun min-su-im-ni-da\n注意：입니다 发音为 [임니다]',
-                    fillBlank: { sentence: '저는 ______입니다.', answer: '민수' }
-                }, {
-                    id: 'z4',
-                    korean: '네, 좋아요.',
-                    chinese: '是的，好的。',
-                    vocabulary: [{ word: '네', meaning: '是的' }, { word: '좋아요', meaning: '好的/喜欢' }],
-                    pronunciation: 'ne, jo-a-yo\n注意：좋아요 中 j 发音类似英语 j，아요 连读',
-                    fillBlank: { sentence: '네, ______.', answer: '좋아요' }
-                }, {
-                    id: 'z5',
-                    korean: '하나, 둘, 셋!',
-                    chinese: '一、二、三！',
-                    vocabulary: [{ word: '하나', meaning: '一' }, { word: '둘', meaning: '二' }, { word: '셋', meaning: '三' }],
-                    pronunciation: 'ha-na, dul, set!\n注意：셋(set) 发音短促有力',
-                    fillBlank: { sentence: '하나, ______, 셋!', answer: '둘' }
-                }, {
-                    id: 'z6',
-                    korean: '만나서 반갑습니다.',
-                    chinese: '很高兴见到你。',
-                    vocabulary: [{ word: '만나서', meaning: '见到（连接）' }, { word: '반갑습니다', meaning: '高兴' }],
-                    pronunciation: 'man-na-seo ban-gap-seum-ni-da\n注意：반갑습니다 中 gap-seum-ni-da 发音连贯',
-                    fillBlank: { sentence: '만나서 ______.', answer: '반갑습니다' }
-                }],
-                topik1: [{
-                    id: 't1_1',
-                    korean: '이거 얼마예요?',
-                    chinese: '这个多少钱？',
-                    vocabulary: [{ word: '이거', meaning: '这个' }, { word: '얼마예요', meaning: '多少钱' }],
-                    pronunciation: 'i-geo eol-ma-ye-yo\n注意：얼마 中 eol 发音类似"哦儿"',
-                    fillBlank: { sentence: '이거 ______?', answer: '얼마예요' }
-                }, {
-                    id: 't1_2',
-                    korean: '김치찌개 하나 주세요.',
-                    chinese: '请给我一份泡菜汤。',
-                    vocabulary: [{ word: '김치찌개', meaning: '泡菜汤' }, { word: '주세요', meaning: '请给' }],
-                    pronunciation: 'gim-chi-jji-gae ha-na ju-se-yo\n注意：찌개 中 jji 是紧音，发音用力',
-                    fillBlank: { sentence: '김치찌개 하나 ______.', answer: '주세요' }
-                }, {
-                    id: 't1_3',
-                    korean: '서울역이 어디예요?',
-                    chinese: '首尔站在哪里？',
-                    vocabulary: [{ word: '서울역', meaning: '首尔站' }, { word: '어디예요', meaning: '在哪里' }],
-                    pronunciation: 'seo-ul-yeok-i eo-di-ye-yo\n注意：역이 中 yeok-i 连读为 [여기]',
-                    fillBlank: { sentence: '서울역이 ______?', answer: '어디예요' }
-                }, {
-                    id: 't1_4',
-                    korean: '지금 몇 시예요?',
-                    chinese: '现在几点了？',
-                    vocabulary: [{ word: '지금', meaning: '现在' }, { word: '몇 시', meaning: '几点' }],
-                    pronunciation: 'ji-geum myeot si-ye-yo\n注意：몇 发音为 [멷]，尾音 t 轻读',
-                    fillBlank: { sentence: '지금 ______ 시예요?', answer: '몇' }
-                }, {
-                    id: 't1_5',
-                    korean: '저는 중국 사람입니다.',
-                    chinese: '我是中国人。',
-                    vocabulary: [{ word: '중국', meaning: '中国' }, { word: '사람', meaning: '人' }],
-                    pronunciation: 'jeo-neun jung-guk sa-ram-im-ni-da\n注意：사람입니다 连读为 [사라밈니다]',
-                    fillBlank: { sentence: '저는 중국 ______입니다.', answer: '사람' }
-                }, {
-                    id: 't1_6',
-                    korean: '오늘 날씨가 좋아요.',
-                    chinese: '今天天气很好。',
-                    vocabulary: [{ word: '오늘', meaning: '今天' }, { word: '날씨', meaning: '天气' }, { word: '좋아요',
-                        meaning: '好' }],
-                    pronunciation: 'o-neul nal-ssi-ga jo-a-yo\n注意：날씨 中 ssi 是紧音',
-                    fillBlank: { sentence: '오늘 ______가 좋아요.', answer: '날씨' }
-                }],
-                topik2: [{
-                    id: 't2_1',
-                    korean: '내일 학교에 갈 거예요?',
-                    chinese: '明天去学校吗？',
-                    vocabulary: [{ word: '내일', meaning: '明天' }, { word: '학교', meaning: '学校' }, { word: '갈 거예요',
-                        meaning: '会去' }],
-                    pronunciation: 'nae-il hak-gyo-e gal geo-ye-yo\n注意：학교에 连读为 [하꾜에]',
-                    fillBlank: { sentence: '내일 ______에 갈 거예요?', answer: '학교' }
-                }, {
-                    id: 't2_2',
-                    korean: '이번 주말에 뭐 할 거예요?',
-                    chinese: '这个周末打算做什么？',
-                    vocabulary: [{ word: '주말', meaning: '周末' }, { word: '뭐', meaning: '什么' }, { word: '할 거예요',
-                        meaning: '打算做' }],
-                    pronunciation: 'i-beon ju-mal-e mwo hal geo-ye-yo\n注意：주말에 连读为 [주마레]',
-                    fillBlank: { sentence: '이번 ______에 뭐 할 거예요?', answer: '주말' }
-                }, {
-                    id: 't2_3',
-                    korean: '저는 한국어를 공부하고 있어요.',
-                    chinese: '我正在学习韩语。',
-                    vocabulary: [{ word: '한국어', meaning: '韩语' }, { word: '공부하고', meaning: '学习（正在）' }, { word: '있어요',
-                        meaning: '正在' }],
-                    pronunciation: 'jeo-neun han-gu-geo-reul gong-bu-ha-go i-sseo-yo\n注意：한국어를 中 reul 发音清晰',
-                    fillBlank: { sentence: '저는 ______를 공부하고 있어요.', answer: '한국어' }
-                }, {
-                    id: 't2_4',
-                    korean: '날씨가 추워서 집에 있었어요.',
-                    chinese: '天气冷所以待在家了。',
-                    vocabulary: [{ word: '추워서', meaning: '冷所以' }, { word: '집', meaning: '家' }, { word: '있었어요',
-                        meaning: '待了' }],
-                    pronunciation: 'nal-ssi-ga chu-wo-seo ji-be i-sseo-sseo-yo\n注意：추워서 中 wo 发音圆润',
-                    fillBlank: { sentence: '날씨가 추워서 ______에 있었어요.', answer: '집' }
-                }, {
-                    id: 't2_5',
-                    korean: '같이 영화 보러 갈래요?',
-                    chinese: '一起去看电影吗？',
-                    vocabulary: [{ word: '같이', meaning: '一起' }, { word: '영화', meaning: '电影' }, { word: '보러 갈래요',
-                        meaning: '去看吗' }],
-                    pronunciation: 'ga-chi yeong-hwa bo-reo gal-lae-yo\n注意：같이 发音为 [가치]',
-                    fillBlank: { sentence: '같이 ______ 보러 갈래요?', answer: '영화' }
-                }, {
-                    id: 't2_6',
-                    korean: '저는 커피보다 차를 더 좋아해요.',
-                    chinese: '比起咖啡我更喜欢茶。',
-                    vocabulary: [{ word: '커피', meaning: '咖啡' }, { word: '차', meaning: '茶' }, { word: '더 좋아해요',
-                        meaning: '更喜欢' }],
-                    pronunciation: 'jeo-neun keo-pi-bo-da cha-reul deo jo-a-hae-yo\n注意：보다 表示比较"比起"',
-                    fillBlank: { sentence: '저는 커피보다 ______를 더 좋아해요.', answer: '차' }
-                }],
-                topik3: [{
-                    id: 't3_1',
-                    korean: '한국에 온 지 얼마나 됐어요?',
-                    chinese: '来韩国多久了？',
-                    vocabulary: [{ word: '온 지', meaning: '来了（之后）' }, { word: '얼마나', meaning: '多久' }, { word: '됐어요',
-                        meaning: '成了/到了' }],
-                    pronunciation: 'han-gu-ge on ji eol-ma-na dwae-sseo-yo\n注意：온 지 中 on 发音为 [온]，鼻音收尾',
-                    fillBlank: { sentence: '한국에 온 지 ______ 됐어요?', answer: '얼마나' }
-                }, {
-                    id: 't3_2',
-                    korean: '그 영화는 생각보다 재미없었어요.',
-                    chinese: '那部电影比想象中无趣。',
-                    vocabulary: [{ word: '생각보다', meaning: '比想象' }, { word: '재미없었어요', meaning: '无趣（过去）' }],
-                    pronunciation: 'geu yeong-hwa-neun saeng-gak-bo-da jae-mi-eop-seo-sseo-yo\n注意：재미없었어요 中 eop-seo 连读',
-                    fillBlank: { sentence: '그 영화는 생각보다 ______.', answer: '재미없었어요' }
-                }, {
-                    id: 't3_3',
-                    korean: '열심히 공부했지만 시험이 어려웠어요.',
-                    chinese: '虽然努力学习了但考试很难。',
-                    vocabulary: [{ word: '열심히', meaning: '努力地' }, { word: '했지만', meaning: '做了但是' }, { word: '어려웠어요',
-                        meaning: '难（过去）' }],
-                    pronunciation: 'yeol-sim-hi gong-bu-haet-ji-man si-heo-mi eo-ryeo-weo-sseo-yo\n注意：했지만 中 ji-man 发音清晰，表示转折',
-                    fillBlank: { sentence: '열심히 공부했지만 시험이 ______.', answer: '어려웠어요' }
-                }, {
-                    id: 't3_4',
-                    korean: '한국어를 잘 하려면 매일 연습해야 해요.',
-                    chinese: '想要韩语说得好必须每天练习。',
-                    vocabulary: [{ word: '잘 하려면', meaning: '想要做得好' }, { word: '매일', meaning: '每天' }, { word: '연습해야 해요',
-                        meaning: '必须练习' }],
-                    pronunciation: 'han-gu-geo-reul jal ha-ryeo-myeon mae-il yeon-seu-pae-ya hae-yo\n注意：하려면 表示假设"想要…的话"',
-                    fillBlank: { sentence: '한국어를 잘 하려면 ______ 연습해야 해요.', answer: '매일' }
-                }, {
-                    id: 't3_5',
-                    korean: '친구가 아파서 병원에 같이 가 줬어요.',
-                    chinese: '朋友生病了所以陪他去了医院。',
-                    vocabulary: [{ word: '아파서', meaning: '生病所以' }, { word: '병원', meaning: '医院' }, { word: '가 줬어요',
-                        meaning: '陪着去了' }],
-                    pronunciation: 'chin-gu-ga a-pa-seo byeong-won-e ga-chi ga jweo-sseo-yo\n注意：가 줬어요 表示为别人做某事',
-                    fillBlank: { sentence: '친구가 아파서 ______에 같이 가 줬어요.', answer: '병원' }
-                }, {
-                    id: 't3_6',
-                    korean: '이 책을 읽어 보는 게 좋을 것 같아요.',
-                    chinese: '我觉得读读这本书会比较好。',
-                    vocabulary: [{ word: '읽어 보는 게', meaning: '读读看' }, { word: '좋을 것 같아요', meaning: '觉得会好' }],
-                    pronunciation: 'i chae-geul il-geo bo-neun ge jo-eul geot ga-ta-yo\n注意：것 같아요 表示推测"觉得会…"',
-                    fillBlank: { sentence: '이 책을 읽어 보는 게 ______ 같아요.', answer: '좋을 것' }
-                }]
-            };
+const contentDB = {
+  zero: [
+    {
+      korean: "안녕하세요. 저는 학생입니다. 한국어를 처음 배우고 있습니다. 매일 조금씩 공부하고 있습니다.",
+      chinese: "你好。我是学生。我正在学习韩语。我每天一点点地学习。",
+      vocab: "안녕하세요（你好）, 학생（学生）, 배우다（学习）, 매일（每天）",
+      pronunciation: "安宁哈塞哟..."
+    }
+  ],
+
+  topik1: [
+    {
+      korean: "오늘은 날씨가 아주 좋습니다. 저는 친구와 함께 카페에 가서 커피를 마셨습니다. 우리는 즐거운 시간을 보냈습니다.",
+      chinese: "今天天气很好。我和朋友一起去了咖啡店喝咖啡。我们度过了愉快的时光。",
+      vocab: "날씨（天气）, 친구（朋友）, 카페（咖啡店）, 즐겁다（开心）",
+      pronunciation: "..."
+    }
+  ],
+
+  topik2: [
+    {
+      korean: "요즘 한국어를 배우는 사람들이 점점 많아지고 있습니다. 한국 드라마와 음악의 영향으로 많은 사람들이 한국어에 관심을 가지게 되었습니다.",
+      chinese: "最近学习韩语的人越来越多。因为韩剧和音乐的影响，很多人开始对韩语感兴趣。",
+      vocab: "요즘（最近）, 점점（逐渐）, 영향（影响）, 관심（兴趣）",
+      pronunciation: "..."
+    }
+  ],
+
+  topik3: [
+    {
+      korean: "외국어를 배우는 것은 단순히 언어 능력을 향상시키는 것뿐만 아니라, 그 나라의 문화와 사고방식을 이해하는 데에도 큰 도움이 됩니다.",
+      chinese: "学习外语不仅能提高语言能力，还能帮助理解该国文化和思维方式。",
+      vocab: "외국어（外语）, 향상시키다（提高）, 문화（文化）, 사고방식（思维方式）",
+      pronunciation: "..."
+    }
+  ]
+};
 
             // ==================== 获取随机内容 ====================
             function getRandomContent(level) {
